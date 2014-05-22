@@ -2,18 +2,18 @@ run <- function() {
   # Load each data set.
   data.training <- loadData("./train/subject_train.txt", "./train/X_train.txt", "./train/y_train.txt")
   data.test <- loadData("./test/subject_test.txt", "./test/X_test.txt", "./test/y_test.txt")
-  data.labels <- loadLabels()
 
   # Merge the training and the test sets to create one data set.
   data <- mergeData(data.training, data.test)
-  data <- applyHeadings(data)
+  names(data) <- getHeadings()
 
   # Extract only the measurements on the mean and standard deviation for each measurement. 
   data.filtered <- filter(data)
   
   # Use descriptive activity names to name the activities in the data set.
   # Appropriately label the data set with descriptive activity names. 
-  data.named <- nameActivities(data.filtered)
+  data.labels <- loadLabels()
+  data.named <- nameActivities(data.filtered, data.labels)
   
   data.named
   
@@ -25,8 +25,8 @@ averagesByActivityAndSubject <- function(d) {
   NA
 }
 
-nameActivities <- function(d) {
-  transform(d, V1 = levels(f)[V1])
+nameActivities <- function(d, l) {
+  transform(d, label = levels(l)[label])
 }
 
 filter <- function(d) {
@@ -34,10 +34,16 @@ filter <- function(d) {
   d[,col.indexes]
 }
 
-applyHeadings <- function(d) {
+getHeadings <- function() {
   # loads headings from "features.txt" and assigns column headings
-  # consider using gsub() and lower()
-  NA
+  headings <- read.table("./features.txt")
+  
+  # strip unacceptable characters and convert to lowercase
+  headings.stripped <- sapply(X = headings$V2, FUN=gsub, pattern = "[-,\\(\\)]", replacement = "")
+  headings.lowered <- sapply(X = headings.stripped, FUN=tolower)
+  
+  # return headings with 'subject' and 'label' headings prepended
+  c("subject", "label", headings.lowered)
 }
 
 mergeData <- function(train, test) {
