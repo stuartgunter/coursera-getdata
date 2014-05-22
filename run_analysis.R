@@ -6,6 +6,7 @@ run <- function() {
 
   # Merge the training and the test sets to create one data set.
   data <- mergeData(data.training, data.test)
+  data <- applyHeadings(data)
 
   # Extract only the measurements on the mean and standard deviation for each measurement. 
   data.filtered <- filter(data)
@@ -31,6 +32,12 @@ nameActivities <- function(d) {
 filter <- function(d) {
   col.indexes <- c(1:6,41:46,81:86,121:126,161:166,201:202,214:215,227:228,240:241,253:254,266:271,345:350,424:429,503:504,529:530)
   d[,col.indexes]
+}
+
+applyHeadings <- function(d) {
+  # loads headings from "features.txt" and assigns column headings
+  # consider using gsub() and lower()
+  NA
 }
 
 mergeData <- function(train, test) {
