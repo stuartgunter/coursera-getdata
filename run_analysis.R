@@ -30,8 +30,28 @@ nameActivities <- function(d, l) {
 }
 
 filter <- function(d) {
-  col.indexes <- c(1:6,41:46,81:86,121:126,161:166,201:202,214:215,227:228,240:241,253:254,266:271,345:350,424:429,503:504,529:530)
-  d[,col.indexes]
+  subset(d, select = c(subject,
+                       label,
+                       tbodyaccmeanx:tbodyaccstdz,
+                       tgravityaccmeanx:tgravityaccstdz,
+                       tbodyaccjerkmeanx:tbodyaccjerkstdz,
+                       tbodygyromeanx:tbodygyrostdz,
+                       tbodygyrojerkmeanx:tbodygyrojerkstdz,
+                       tbodyaccmagmean:tbodyaccmagstd,
+                       tgravityaccmagmean:tgravityaccmagstd,
+                       tbodyaccjerkmagmean:tbodyaccjerkmagstd,
+                       tbodygyromagmean:tbodygyromagstd,
+                       tbodygyrojerkmagmean:tbodygyrojerkmagstd,
+                       fbodyaccmeanx:fbodyaccstdz,
+                       fbodyaccjerkmeanx:fbodyaccjerkstdz,
+                       fbodygyromeanx:fbodygyrostdz,
+                       fbodyaccmagmean:fbodyaccmagstd,
+                       fbodybodyaccjerkmagmean:fbodybodyaccjerkmagstd,
+                       fbodybodygyromagmean:fbodybodygyromagstd,
+                       fbodybodygyrojerkmagmean:fbodybodygyrojerkmagstd))
+  
+  #col.indexes <- c(1:6,41:46,81:86,121:126,161:166,201:202,214:215,227:228,240:241,253:254,266:271,345:350,424:429,503:504,529:530)
+  #d[,col.indexes]
 }
 
 getHeadings <- function() {
