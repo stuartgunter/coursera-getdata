@@ -1,3 +1,5 @@
+library(Hmisc)
+
 run <- function() {
   # Load each data set.
   data.training <- loadData("./train/subject_train.txt", "./train/X_train.txt", "./train/y_train.txt")
@@ -22,7 +24,7 @@ run <- function() {
 }
 
 averagesByActivityAndSubject <- function(d) {
-  NA
+  summarize(x, x[c("subject", "label")], colMeans, stat.name = NULL)
 }
 
 nameActivities <- function(d, l) {
