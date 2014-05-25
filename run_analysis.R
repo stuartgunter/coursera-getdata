@@ -25,23 +25,23 @@ averagesByActivityAndSubject <- function(d) {
 filter <- function(d) {
   subset(d, select = c(subject,
                        activity,
-                       tbodyaccmeanx:tbodyaccstdz,
-                       tgravityaccmeanx:tgravityaccstdz,
-                       tbodyaccjerkmeanx:tbodyaccjerkstdz,
-                       tbodygyromeanx:tbodygyrostdz,
-                       tbodygyrojerkmeanx:tbodygyrojerkstdz,
-                       tbodyaccmagmean:tbodyaccmagstd,
-                       tgravityaccmagmean:tgravityaccmagstd,
-                       tbodyaccjerkmagmean:tbodyaccjerkmagstd,
-                       tbodygyromagmean:tbodygyromagstd,
-                       tbodygyrojerkmagmean:tbodygyrojerkmagstd,
-                       fbodyaccmeanx:fbodyaccstdz,
-                       fbodyaccjerkmeanx:fbodyaccjerkstdz,
-                       fbodygyromeanx:fbodygyrostdz,
-                       fbodyaccmagmean:fbodyaccmagstd,
-                       fbodybodyaccjerkmagmean:fbodybodyaccjerkmagstd,
-                       fbodybodygyromagmean:fbodybodygyromagstd,
-                       fbodybodygyrojerkmagmean:fbodybodygyrojerkmagstd))
+                       tbodyacc.mean.x:tbodyacc.std.z,
+                       tgravityacc.mean.x:tgravityacc.std.z,
+                       tbodyaccjerk.mean.x:tbodyaccjerk.std.z,
+                       tbodygyro.mean.x:tbodygyro.std.z,
+                       tbodygyrojerk.mean.x:tbodygyrojerk.std.z,
+                       tbodyaccmag.mean:tbodyaccmag.std,
+                       tgravityaccmag.mean:tgravityaccmag.std,
+                       tbodyaccjerkmag.mean:tbodyaccjerkmag.std,
+                       tbodygyromag.mean:tbodygyromag.std,
+                       tbodygyrojerkmag.mean:tbodygyrojerkmag.std,
+                       fbodyacc.mean.x:fbodyacc.std.z,
+                       fbodyaccjerk.mean.x:fbodyaccjerk.std.z,
+                       fbodygyro.mean.x:fbodygyro.std.z,
+                       fbodyaccmag.mean:fbodyaccmag.std,
+                       fbodybodyaccjerkmag.mean:fbodybodyaccjerkmag.std,
+                       fbodybodygyromag.mean:fbodybodygyromag.std,
+                       fbodybodygyrojerkmag.mean:fbodybodygyrojerkmag.std))
 }
 
 # loads column headings and formats according to tidy data guidelines
@@ -50,8 +50,9 @@ getHeadings <- function() {
   headings <- read.table("./features.txt")
   
   # strip unacceptable characters and convert to lowercase
-  headings.stripped <- sapply(X = headings$V2, FUN=gsub, pattern = "[-,\\(\\)]", replacement = "")
-  headings.lowered <- sapply(X = headings.stripped, FUN=tolower)
+  headings.stripped <- sapply(X = headings$V2, FUN=gsub, pattern = "[\\(\\)]", replacement = "")
+  headings.dotted <- sapply(X = headings.stripped, FUN=gsub, pattern = "-", replacement = ".")
+  headings.lowered <- sapply(X = headings.dotted, FUN=tolower)
   
   # return headings with 'subject' and 'label' headings prepended
   c("subject", "activity", headings.lowered)
