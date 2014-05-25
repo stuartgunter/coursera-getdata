@@ -1,12 +1,8 @@
 library(plyr)
 
 run <- function() {
-  # Load each data set.
-  data.training <- loadTrainingData()
-  data.test <- loadTestData()
-
   # Merge the training and the test sets to create one data set.
-  data <- mergeData(data.training, data.test)
+  data <- rbind(trainingData(), testData())
   names(data) <- getHeadings()
 
   # Extract only the measurements on the mean and standard deviation for each measurement. 
@@ -14,21 +10,18 @@ run <- function() {
   
   # Use descriptive activity names to name the activities in the data set.
   # Appropriately label the data set with descriptive activity names. 
-  data.labels <- loadLabels()
-  data.named <- nameActivities(data.filtered, data.labels)
+  data.named <- nameActivities(data.filtered)
   
-  # Creates a second, independent tidy data set with the average of each variable for each activity and each subject. 
+  # Create a second, independent tidy data set with the average of each variable for each activity and each subject. 
   averagesByActivityAndSubject(data.named)
 }
 
+# returns the means of each measurement by activity and subject
 averagesByActivityAndSubject <- function(d) {
   ddply(d, .(subject, label), numcolwise(mean))
 }
 
-nameActivities <- function(d, l) {
-  transform(d, label = levels(l)[label])
-}
-
+# returns a subset of `d` containing only mean or standard deviation measurements
 filter <- function(d) {
   subset(d, select = c(subject,
                        label,
@@ -51,6 +44,7 @@ filter <- function(d) {
                        fbodybodygyrojerkmagmean:fbodybodygyrojerkmagstd))
 }
 
+# loads column headings and formats according to tidy data guidelines
 getHeadings <- function() {
   # loads headings from "features.txt" and assigns column headings
   headings <- read.table("./features.txt")
@@ -63,10 +57,14 @@ getHeadings <- function() {
   c("subject", "label", headings.lowered)
 }
 
-mergeData <- function(train, test) {
-  rbind(train, test)
+
+# converts the integer labels to factors
+nameActivities <- function(d) {
+  l <- loadLabels()
+  transform(d, label = levels(l)[label])
 }
 
+# loads activity labels
 loadLabels <- function() {
   labels <- read.table("./activity_labels.txt")
   factor(labels$V2, levels=labels$V2)
@@ -74,12 +72,12 @@ loadLabels <- function() {
 
 
 # loads the test dataset
-loadTestData <- function() {
+testData <- function() {
   loadData("./test/subject_test.txt", "./test/X_test.txt", "./test/y_test.txt")
 }
 
 # loads the training dataset
-loadTrainingData <- function() {
+trainingData <- function() {
   loadData("./train/subject_train.txt", "./train/X_train.txt", "./train/y_train.txt")
 }
 
