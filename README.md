@@ -1,5 +1,11 @@
 # Analysis
 
+## Instructions
+
+The `run_analysis.R` script contains a set of steps to take the input dataset (expected in the working directory) and produce a tidy dataset as described in the accompanying code book. These steps require no manual intervention and are idempotent.
+
+To create a tidy dataset from the input files, simply execute the `run()` function (accepting no arguments).
+
 ## Functions
 
 The following functions exist in the `run_analysis.R` script:
