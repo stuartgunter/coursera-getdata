@@ -1,9 +1,9 @@
-library(Hmisc)
+library(plyr)
 
 run <- function() {
   # Load each data set.
-  data.training <- loadData("./train/subject_train.txt", "./train/X_train.txt", "./train/y_train.txt")
-  data.test <- loadData("./test/subject_test.txt", "./test/X_test.txt", "./test/y_test.txt")
+  data.training <- loadTrainingData()
+  data.test <- loadTestData()
 
   # Merge the training and the test sets to create one data set.
   data <- mergeData(data.training, data.test)
@@ -17,14 +17,12 @@ run <- function() {
   data.labels <- loadLabels()
   data.named <- nameActivities(data.filtered, data.labels)
   
-  data.named
-  
   # Creates a second, independent tidy data set with the average of each variable for each activity and each subject. 
-  #averagesByActivityAndSubject(data.named)
+  averagesByActivityAndSubject(data.named)
 }
 
 averagesByActivityAndSubject <- function(d) {
-  summarize(x, x[c("subject", "label")], colMeans, stat.name = NULL)
+  ddply(d, .(subject, label), numcolwise(mean))
 }
 
 nameActivities <- function(d, l) {
@@ -51,9 +49,6 @@ filter <- function(d) {
                        fbodybodyaccjerkmagmean:fbodybodyaccjerkmagstd,
                        fbodybodygyromagmean:fbodybodygyromagstd,
                        fbodybodygyrojerkmagmean:fbodybodygyrojerkmagstd))
-  
-  #col.indexes <- c(1:6,41:46,81:86,121:126,161:166,201:202,214:215,227:228,240:241,253:254,266:271,345:350,424:429,503:504,529:530)
-  #d[,col.indexes]
 }
 
 getHeadings <- function() {
@@ -77,6 +72,18 @@ loadLabels <- function() {
   factor(labels$V2, levels=labels$V2)
 }
 
+
+# loads the test dataset
+loadTestData <- function() {
+  loadData("./test/subject_test.txt", "./test/X_test.txt", "./test/y_test.txt")
+}
+
+# loads the training dataset
+loadTrainingData <- function() {
+  loadData("./train/subject_train.txt", "./train/X_train.txt", "./train/y_train.txt")
+}
+
+# loads a generic dataset (either training or test data)
 loadData <- function(file.subject, file.data, file.activity) {
   subject <- read.table(file.subject)
   data <- read.table(file.data)
