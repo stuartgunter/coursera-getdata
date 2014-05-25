@@ -18,13 +18,13 @@ run <- function() {
 
 # returns the means of each measurement by activity and subject
 averagesByActivityAndSubject <- function(d) {
-  ddply(d, .(subject, label), numcolwise(mean))
+  ddply(d, .(subject, activity), numcolwise(mean))
 }
 
 # returns a subset of `d` containing only mean or standard deviation measurements
 filter <- function(d) {
   subset(d, select = c(subject,
-                       label,
+                       activity,
                        tbodyaccmeanx:tbodyaccstdz,
                        tgravityaccmeanx:tgravityaccstdz,
                        tbodyaccjerkmeanx:tbodyaccjerkstdz,
@@ -54,14 +54,14 @@ getHeadings <- function() {
   headings.lowered <- sapply(X = headings.stripped, FUN=tolower)
   
   # return headings with 'subject' and 'label' headings prepended
-  c("subject", "label", headings.lowered)
+  c("subject", "activity", headings.lowered)
 }
 
 
 # converts the integer labels to factors
 nameActivities <- function(d) {
   l <- loadLabels()
-  transform(d, label = levels(l)[label])
+  transform(d, activity = levels(l)[activity])
 }
 
 # loads activity labels
